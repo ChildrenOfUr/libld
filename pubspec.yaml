@@ -1,6 +1,6 @@
 name: loadie
-version: 0.0.0
+version: 1.0.0
 author: Paul VanKeuren <paul.vankeuren@gmail.com>
-description: very tiney asset loadie.
+description: very tiney asset loadie. :P
 dependencies:
   browser: any

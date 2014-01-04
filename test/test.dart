@@ -7,7 +7,7 @@ import 'dart:html';
 main(){
   textExtensions.add('poo');
   jsonExtensions.add('street');
-  
+
   // this ogg file is played aloud
   Asset soundfile = new Asset('./mention.ogg')
   ..load()
@@ -43,8 +43,17 @@ main(){
       c.context2D.drawImage(e.get(), 0, 0);      
         }
     );
-  
 
+  List <Asset> assets = 
+      [
+new Asset('./mention.ogg'),
+new Asset('./text.txt'),
+new Asset('./jsontext.json'),
+new Asset('./groddle.street'),
+new Asset('./currant.svg')
+       ];
   
-  
+  Batch b = new Batch(assets)
+  ..load(print).then((_) => print('done!'));
 }
+
