@@ -43,10 +43,10 @@ final List <String> audioExtensions =
 // the callback function will be provided with the percent of the batch that is loaded.
 class Batch {
   List _toLoad = [];
-  int _percentDone = 0;
+  num _percentDone = 0;
   Batch(List <Asset> toLoad){this._toLoad = toLoad;}
   Future<List <Asset> > load(Function callback){
-    int percentEach = 100~/_toLoad.length; 
+    num percentEach = 100/_toLoad.length; 
    
     // creates a list of Futures
     List <Future> futures = [];
@@ -55,7 +55,7 @@ class Batch {
      futures.add(asset.load().whenComplete((){
        // Broadcast that we loaded a file.
        _percentDone += percentEach;
-       callback(_percentDone);}
+       callback(_percentDone.floor());}
      ));
        }     
   
