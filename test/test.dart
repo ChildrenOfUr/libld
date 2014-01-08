@@ -17,6 +17,6 @@ new Asset('./currant.svg')
        ];
   
   Batch b = new Batch(assets)
-  ..load(print).then((assets) => print(ASSET));
+  ..load(print).then((assets) => ASSET['mention'].get().play());
 }
 
