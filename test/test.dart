@@ -10,10 +10,10 @@ main(){
   List <Asset> assets = 
       [
 new Asset('./mention.ogg'),
-new Asset('./text.txt'),
 new Asset('./jsontext.json'),
 new Asset('./groddle.street'),
-new Asset('./currant.svg')
+new Asset('./text.txt'),
+new Asset('./mention.ogg'),
        ];
   
   Batch b = new Batch(assets)

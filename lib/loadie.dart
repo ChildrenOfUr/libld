@@ -110,7 +110,11 @@ class Asset{
           AudioElement audio = new AudioElement()
           ..src = _uri;
           loading = true;
-          audio.onCanPlay.listen((_) {
+          audio.onError.listen((Event err) {
+            print('Error in loading Audio : $_uri');
+            c.complete(null);
+          });
+          audio.onCanPlayThrough.listen((_) {
             ASSET[name] = this;
             this._asset= audio;
             loaded = true;
@@ -126,13 +130,13 @@ class Asset{
         if (_uri.endsWith('.' + ext))
         {
           loading = true;
-          HttpRequest.getString(_uri).then
+          Future request = HttpRequest.getString(_uri).then
           ((String string)  {
             _asset = string;
             loaded = true;
             ASSET[name] = this;
-            c.complete(this);
             });
+          c.complete(request);
         }
       }
       if (loading == true)
