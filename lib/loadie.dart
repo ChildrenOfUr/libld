@@ -48,7 +48,7 @@ class Batch
 	Future<List <Asset> > load(Function callback)
 	{
 		num percentEach = 100/_toLoad.length; 
- 
+		
 		// creates a list of Futures
 		List <Future> futures = [];
 		for (Asset asset in _toLoad)
@@ -59,7 +59,7 @@ class Batch
 				_percentDone += percentEach;
 				callback(_percentDone.floor());
 			}));
-		}     
+		}
 		return Future.wait(futures);
 	}
 }
