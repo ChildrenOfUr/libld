@@ -45,15 +45,15 @@ class Batch
 	num _percentDone = 0;
   
 	Batch(this._toLoad);
-	Future<List <Asset> > load(Function callback)
+	Future<List <Asset> > load(Function callback, [Element statusElement])
 	{
-		num percentEach = 100/_toLoad.length; 
+		num percentEach = 100/_toLoad.length;
 		
 		// creates a list of Futures
 		List <Future> futures = [];
 		for (Asset asset in _toLoad)
 		{
-			futures.add(asset.load().whenComplete(()
+			futures.add(asset.load(statusElement).whenComplete(()
 			{
        			// Broadcast that we loaded a file.
 				_percentDone += percentEach;
@@ -125,6 +125,8 @@ class Asset
 						c.complete(this);
 					});
 					audio.src = _uri;
+					//this seems to be necessary (when compiled to js) to cause the browser to generate a GET for the src
+					document.body.append(audio);
 					break;
 				}
 			}
