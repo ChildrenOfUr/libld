@@ -115,16 +115,43 @@ class Asset
 					audio.onError.listen((Event err) 
 					{
 						print('Error in loading Audio : $_uri');
-						c.complete(null);
+						if(!c.isCompleted)
+							c.complete(err);
 					});
 					audio.onCanPlayThrough.listen((_) 
 					{
 						ASSET[name] = this;
 						this._asset= audio;
 						loaded = true;
-						c.complete(this);
+						if(!c.isCompleted)
+							c.complete(this);
 					});
-					audio.src = _uri;
+					
+					//add 2 audio sources (one mp3 and one ogg) to support multiple browsers
+					String filename = _uri.substring(0, _uri.lastIndexOf('.'));
+					if(ext == "ogg")
+					{
+						SourceElement source = new SourceElement();
+						source.type = 'audio/ogg';
+						source.src = _uri;
+						audio.append(source);
+						SourceElement sourceAlt = new SourceElement();
+						sourceAlt.type = 'audio/mp3';
+						sourceAlt.src = filename + ".mp3";
+						audio.append(sourceAlt);
+					}
+					else
+					{
+						SourceElement source = new SourceElement();
+						source.type = 'audio/mp3';
+						source.src = _uri;
+						audio.append(source);
+						SourceElement sourceAlt = new SourceElement();
+						sourceAlt.type = 'audio/ogg';
+						sourceAlt.src = filename + ".ogg";
+						audio.append(sourceAlt);
+					}
+					
 					//this seems to be necessary (when compiled to js) to cause the browser to generate a GET for the src
 					document.body.append(audio);
 					break;
