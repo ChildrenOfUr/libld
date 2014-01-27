@@ -136,7 +136,7 @@ class Asset
 						source.src = _uri;
 						audio.append(source);
 						SourceElement sourceAlt = new SourceElement();
-						sourceAlt.type = 'audio/mp3';
+						sourceAlt.type = 'audio/mpeg';
 						sourceAlt.src = filename + ".mp3";
 						audio.append(sourceAlt);
 					}
