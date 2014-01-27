@@ -83,7 +83,7 @@ class Asset
 		Completer c = new Completer();    
 		if (loaded == false)
 		{
-			bool loading = false;
+			bool loading = false, data = false;
       
 			// loads ImageElements into memory
 			for (String ext in imageExtensions)
@@ -110,8 +110,15 @@ class Asset
 			{
 				if (_uri.endsWith('.' + ext))
 				{
+					new Timer(new Duration(seconds:2),()
+					{
+						//if sound hasn't started loading, complete anyway
+						if(!data)
+							c.completeError('could not load resource: $_uri');
+					});
 					AudioElement audio = new AudioElement();
 					loading = true;
+					audio.onLoadedData.first.then((_) => data = true);
 					audio.onError.listen((Event err) 
 					{
 						print('Error in loading Audio : $_uri');
