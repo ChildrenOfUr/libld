@@ -143,7 +143,7 @@ class Asset
 					else
 					{
 						SourceElement source = new SourceElement();
-						source.type = 'audio/mp3';
+						source.type = 'audio/mpeg';
 						source.src = _uri;
 						audio.append(source);
 						SourceElement sourceAlt = new SourceElement();
