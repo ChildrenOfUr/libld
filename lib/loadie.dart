@@ -72,6 +72,11 @@ class Asset
 	String name;
 	
 	Asset(this._uri);
+	Asset.fromMap(this._asset,this.name)
+	{
+		loaded = true;
+		ASSET[name] = this;
+	}
 	
 	Future <Asset> load([Element statusElement])
 	{
