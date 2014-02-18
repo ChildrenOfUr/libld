@@ -103,6 +103,11 @@ class Asset
 						loaded = true;
 						c.complete(this);
 					});
+					_asset.onError.listen((_)
+					{
+						_asset = null;
+						c.complete("Could not load image: $_uri");
+					});
 					_asset.src = _uri;
 					break;
 				}
