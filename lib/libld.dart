@@ -1,4 +1,4 @@
-library loadie;
+library libld;
 import 'dart:async';
 import 'dart:html';
 import 'dart:convert';
