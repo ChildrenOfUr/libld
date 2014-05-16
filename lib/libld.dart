@@ -60,6 +60,9 @@ class Batch
 				callback(_percentDone.floor());
 			}));
 		}
+		if(futures.length == 0)
+			callback(100);
+		
 		return Future.wait(futures);
 	}
 }
