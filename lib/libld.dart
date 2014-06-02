@@ -222,6 +222,7 @@ class Asset
 			else
 				c.completeError('nothing is being loaded!');
 		}
+		return c.future;
 	}  
 
 	get()

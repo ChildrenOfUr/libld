@@ -17,6 +17,8 @@ new Asset('./mention.ogg'),
        ];
   
   Batch b = new Batch(assets)
-  ..load(print).then((assets) => ASSET['mention'].get().play());
+  ..load(print).then((assets) => ASSET['mention'].get()
+  ..volume = 1
+  ..play());
 }
 
