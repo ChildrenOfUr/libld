@@ -45,7 +45,7 @@ class Batch
 	num _percentDone = 0;
   
 	Batch(this._toLoad);
-	Future<List <Asset> > load(Function callback, [Element statusElement])
+	Future<List <Asset> > load([Function callback, Element statusElement])
 	{
 		num percentEach = 100/_toLoad.length;
 		
@@ -57,10 +57,11 @@ class Batch
 			{
        			// Broadcast that we loaded a file.
 				_percentDone += percentEach;
+				if (callback != null)
 				callback(_percentDone.floor());
 			}));
 		}
-		if(futures.length == 0)
+		if(futures.length == 0 && callback != null)
 			callback(100);
 		
 		return Future.wait(futures);
@@ -155,6 +156,7 @@ class Asset
 						source.type = 'audio/ogg';
 						source.src = _uri;
 						audio.append(source);
+
 						SourceElement sourceAlt = new SourceElement();
 						sourceAlt.type = 'audio/mpeg';
 						sourceAlt.src = filename + ".mp3";
