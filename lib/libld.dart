@@ -139,7 +139,7 @@ class Asset
 						if(!c.isCompleted)
 							c.complete(err);
 					});
-					audio.onCanPlayThrough.listen((_) 
+					audio.onCanPlay.listen((_) 
 					{
 						ASSET[name] = this;
 						this._asset= audio;

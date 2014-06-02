@@ -1,6 +1,4 @@
 import 'package:libld/libld.dart';
-import 'dart:html';
-
 
 
 main(){
@@ -9,7 +7,6 @@ main(){
 
   List <Asset> assets = 
       [
-new Asset('./mention.ogg'),
 new Asset('./jsontext.json'),
 new Asset('./groddle.street'),
 new Asset('./text.txt')
@@ -26,8 +23,9 @@ doneLoading() {
   print(ASSET['text'] is Asset); // text.txt is referenced by an Asset object
   print(ASSET['text'].get() is String); // Use the asset's payload with .get()
   
-  AudioElement m = ASSET['mention'].get(); // getting an audioElement
-  m.volume = 1.0;
-  m.play();// doesn't play?
-  
+  new Asset('mention.ogg').load()
+    .then((_) {
+      ASSET['mention'].get().play(); // Should play audio...
+    });
+
 }
