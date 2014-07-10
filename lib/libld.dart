@@ -45,7 +45,7 @@ class Batch
 	num _percentDone = 0;
   
 	Batch(this._toLoad);
-	Future<List <Asset> > load(Function callback, [Element statusElement])
+	Future<List <Asset> > load(Function callback, {Element statusElement : null, bool enableCrossOrigin : false})
 	{
 		num percentEach = 100/_toLoad.length;
 		
@@ -53,7 +53,7 @@ class Batch
 		List <Future> futures = [];
 		for (Asset asset in _toLoad)
 		{
-			futures.add(asset.load(statusElement).whenComplete(()
+			futures.add(asset.load(statusElement:statusElement,enableCrossOrigin:enableCrossOrigin).whenComplete(()
 			{
        			// Broadcast that we loaded a file.
 				_percentDone += percentEach;
@@ -81,7 +81,7 @@ class Asset
 		ASSET[name] = this;
 	}
 	
-	Future <Asset> load([Element statusElement])
+	Future <Asset> load({Element statusElement : null, bool enableCrossOrigin : false})
 	{
 		name = _uri.split('/')[_uri.split('/').length - 1].split('.')[0];
 		//provide some on screen status messages
@@ -99,12 +99,15 @@ class Asset
 				if (_uri.endsWith('.' + ext))
 				{
 					this._asset = new ImageElement();
+					if(enableCrossOrigin)
+						(_asset as ImageElement).crossOrigin = "anonymous";
 					loading = true;
 					_asset.onLoad.listen((_) 
 					{
 						ASSET[name] = this;
 						loaded = true;
-						c.complete(this);
+						if(!c.isCompleted)
+							c.complete(this);
 					});
 					_asset.onError.listen((_)
 					{
@@ -131,6 +134,8 @@ class Asset
 					});
 					AudioElement audio = new AudioElement();
 					loading = true;
+					if(enableCrossOrigin)
+                    	audio.crossOrigin = "anonymous";
 					audio.onLoadedData.first.then((_) => data = true);
 					audio.onError.listen((Event err) 
 					{
@@ -186,13 +191,12 @@ class Asset
 				if (_uri.endsWith('.' + ext))
 				{
 					loading = true;
-					Future request = HttpRequest.getString(_uri).then
-					((String string)  
-					{
-						_asset = string;
-						loaded = true;
-						ASSET[name] = this;
-					});
+					Future request;
+					if(enableCrossOrigin)
+						request = HttpRequest.requestCrossOrigin(_uri).then((String string) => setString(string));
+					else
+						request = HttpRequest.getString(_uri).then((String string) => setString(string));
+					
 					c.complete(request);
 					break;
 				}
@@ -206,14 +210,11 @@ class Asset
 				if (_uri.endsWith('.' + ext))
 				{
 					loading = true;
-					HttpRequest.getString(_uri).then
-					((String string)
-					{
-						ASSET[name] = this;
-						_asset =  JSON.decode(string);
-						loaded = true;
-						c.complete(this);
-					});
+					if(enableCrossOrigin)
+						HttpRequest.requestCrossOrigin(_uri).then((String string) => setString(string,c:c,asJson:true));
+					else
+						HttpRequest.getString(_uri).then((String string) => setString(string,c:c,asJson:true));
+                    					
 					break;
 				}
 			}
@@ -222,7 +223,20 @@ class Asset
 			else
 				c.completeError('nothing is being loaded!');
 		}
-	}  
+	}
+	
+	void setString(String string, {Completer c : null, bool asJson : false})
+	{
+		if(asJson)
+			_asset = JSON.decode(string);
+		else
+			_asset = string;
+		loaded = true;
+		ASSET[name] = this;
+		
+		if(c != null)
+			c.complete(this);
+	}
 
 	get()
 	{
