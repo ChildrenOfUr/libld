@@ -57,10 +57,11 @@ class Batch
 			{
        			// Broadcast that we loaded a file.
 				_percentDone += percentEach;
+				if (callback != null)
 				callback(_percentDone.floor());
 			}));
 		}
-		if(futures.length == 0)
+		if(futures.length == 0 && callback != null)
 			callback(100);
 		
 		return Future.wait(futures);
@@ -143,7 +144,7 @@ class Asset
 						if(!c.isCompleted)
 							c.complete(err);
 					});
-					audio.onCanPlayThrough.listen((_) 
+					audio.onCanPlay.listen((_) 
 					{
 						ASSET[name] = this;
 						this._asset= audio;
@@ -160,6 +161,7 @@ class Asset
 						source.type = 'audio/ogg';
 						source.src = _uri;
 						audio.append(source);
+
 						SourceElement sourceAlt = new SourceElement();
 						sourceAlt.type = 'audio/mpeg';
 						sourceAlt.src = filename + ".mp3";
