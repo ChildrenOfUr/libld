@@ -97,7 +97,12 @@ class Asset
 			// loads ImageElements into memory
 			for (String ext in imageExtensions)
 			{
-				if (_uri.endsWith('.' + ext))
+				String uriExt = _uri.substring(_uri.lastIndexOf('.'));
+				RegExp extWithQuery = new RegExp('(\\.$ext)\\?.*');
+				if (uriExt.contains(extWithQuery)) {
+					uriExt = extWithQuery.firstMatch(uriExt).group(1);
+				}
+				if (uriExt.endsWith('.' + ext))
 				{
 					this._asset = new ImageElement();
 					if(enableCrossOrigin)
