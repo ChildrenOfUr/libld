@@ -50,7 +50,7 @@ class Batch
 		num percentEach = 100/_toLoad.length;
 		
 		// creates a list of Futures
-		List <Future> futures = [];
+		List <Future<Asset>> futures = [];
 		for (Asset asset in _toLoad)
 		{
 			futures.add(asset.load(statusElement:statusElement,enableCrossOrigin:enableCrossOrigin).whenComplete(()
@@ -235,7 +235,7 @@ class Asset
 	void setString(String string, {Completer c : null, bool asJson : false})
 	{
 		if(asJson)
-			_asset = JSON.decode(string);
+			_asset = jsonDecode(string);
 		else
 			_asset = string;
 		loaded = true;
