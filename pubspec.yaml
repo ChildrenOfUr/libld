@@ -1,6 +1,4 @@
 name: libld
-version: 2.0.0
+version: 2.0.1
 author: Paul VanKeuren & Robert  McDermot
 description: very tiney asset loadie. :P
-dependencies:
-  browser: any

@@ -12,7 +12,7 @@ new Asset('./groddle.street'),
 new Asset('./text.txt')
        ];
  
-  new Batch(assets).load(print) //load all the assets, printing progress after each file.
+  new Batch(assets).load(callback: print) //load all the assets, printing progress after each file.
     ..then((_) {
       doneLoading(); // When they are all loaded, run doneLoading.
     }); 
