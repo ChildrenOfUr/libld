@@ -37,6 +37,9 @@ final List <String> audioExtensions =
  'ogg'
 ];
 
+// A function that will accept the current load percentage in a callback
+typedef void LibldCallback(int percentDone);
+
 // a helper class for loading bars and such.
 // the callback function will be provided with the percent of the batch that is loaded.
 class Batch
@@ -45,15 +48,16 @@ class Batch
 	num _percentDone = 0;
 
 	Batch(this._toLoad);
-	Future<List <Asset> > load({Function callback: null, Element statusElement: null, bool enableCrossOrigin: false})
+
+	Future<List<Asset>> load({LibldCallback callback: null, Element statusElement: null, bool enableCrossOrigin: false})
 	{
-		num percentEach = 100/_toLoad.length;
+		num percentEach = 100 / _toLoad.length;
 
 		// creates a list of Futures
-		List <Future<Asset>> futures = [];
+		List<Future<Asset>> futures = [];
 		for (Asset asset in _toLoad)
 		{
-			futures.add(asset.load(statusElement:statusElement,enableCrossOrigin:enableCrossOrigin).whenComplete(()
+			futures.add(asset.load(statusElement: statusElement, enableCrossOrigin: enableCrossOrigin).whenComplete(()
 			{
        			// Broadcast that we loaded a file.
 				_percentDone += percentEach;
@@ -116,11 +120,11 @@ class Asset
 						if(!c.isCompleted)
 							c.complete(this);
 					});
-					_asset.onError.listen((ErrorEvent err)
+					_asset.onError.listen((Event err)
 					{
 						_asset = null;
 						print("Could not load image: $_uri");
-						c.completeError(err.error);
+						c.completeError((err as ErrorEvent).error);
 					});
 					_asset.src = _uri;
 					break;
@@ -221,8 +225,8 @@ class Asset
 			{
 				if (_uri.endsWith('.' + ext))
 				{
-					void _setString(dynamic string) {
-						setString(string as String, c:c, asJson: true);
+					void _setString(String str) {
+						setString(str, c:c, asJson: true);
 					}
 
 					loading = true;
