@@ -221,11 +221,15 @@ class Asset
 			{
 				if (_uri.endsWith('.' + ext))
 				{
+					void _setString(dynamic string) {
+						setString(string as String, c:c, asJson: true);
+					}
+
 					loading = true;
 					if(enableCrossOrigin)
-						HttpRequest.requestCrossOrigin(_uri).then((String string) => setString(string,c:c,asJson:true));
+						HttpRequest.requestCrossOrigin(_uri).then(_setString);
 					else
-						HttpRequest.getString(_uri).then((String string) => setString(string,c:c,asJson:true));
+						HttpRequest.getString(_uri).then(_setString);
 
 					break;
 				}
