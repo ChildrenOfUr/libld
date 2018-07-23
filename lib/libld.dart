@@ -250,7 +250,7 @@ class Asset
 	void setString(String string, {Completer c : null, bool asJson : false})
 	{
 		if(asJson)
-			_asset = jsonDecode(string);
+			_asset = jsonDecode(string) as Map<String, dynamic>;
 		else
 			_asset = string;
 		loaded = true;
