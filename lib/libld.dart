@@ -64,7 +64,7 @@ class Batch
 		if(futures.length == 0 && callback != null)
 			callback(100);
 		
-		return Future.wait(futures);
+		return Future.wait(futures.reversed);
 	}
 }
 
@@ -235,7 +235,7 @@ class Asset
 	void setString(String string, {Completer c : null, bool asJson : false})
 	{
 		if(asJson)
-			_asset = JSON.decode(string);
+			_asset = jsonDecode(string);
 		else
 			_asset = string;
 		loaded = true;
